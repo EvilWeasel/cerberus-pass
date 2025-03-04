@@ -1,11 +1,10 @@
-use std::io::{self, Write};
-
-use cerberus_pass::utils::{self, combine_prompt, prompt_user};
+// todo: definetly need to remove this
+#![allow(dead_code)]
+use cerberus_pass::utils::{combine_prompt, prompt_user};
 use manager::PasswordManager;
 mod manager;
-
 fn main() {
-    let manager = PasswordManager::new();
+    let mut manager = PasswordManager::new();
     println!("Welcome to Cerberus-Pass");
     loop {
         let prompt = "
@@ -30,7 +29,14 @@ fn main() {
                     .iter()
                     .for_each(|entry| println!("{:?}", entry));
             }
-            2 => {}
+            2 => {
+                let title = prompt_user(combine_prompt("title"));
+                let login = prompt_user(combine_prompt("login"));
+                let password = prompt_user(combine_prompt("password"));
+                let website = prompt_user(combine_prompt("website"));
+                let note = prompt_user(combine_prompt("note"));
+                manager.add_entry(&title, &login, Some(&website), Some(&note), &password);
+            }
             3 => {
                 // input title to get io
                 let title = prompt_user(combine_prompt("title"));
